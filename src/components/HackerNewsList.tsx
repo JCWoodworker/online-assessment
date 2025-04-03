@@ -1,10 +1,15 @@
-import React from "react"
+import React, { useState } from "react"
 import { useHackerNewsArticles } from "../hooks/useHackerNewsArticles"
 import { Box, CircularProgress, Typography } from "@mui/material"
 import { HackerNewsArticle } from "../hooks/useHackerNewsArticles"
+import ArticleCard from "./ArticleCard"
+import Pagination from "./pagination/Pagination"
 
 export const HackerNewsList: React.FC = () => {
-	const { data, isLoading, isError, error } = useHackerNewsArticles()
+	const [page, setPage] = useState(1)
+	const limit = 10
+	const { data, isLoading, isError, error, totalArticles } =
+		useHackerNewsArticles(page, limit)
 
 	if (isLoading) {
 		return (
@@ -47,11 +52,23 @@ export const HackerNewsList: React.FC = () => {
 		)
 	}
 
-	if (data) {
-		return (
+	return (
+		<Box
+			sx={{
+				marginTop: 4,
+				display: "flex",
+				flexDirection: "column",
+				alignItems: "center",
+				gap: 4,
+			}}
+		>
+			<Pagination
+				currentPage={page}
+				setCurrentPage={setPage}
+				totalPages={Math.ceil(totalArticles / limit)}
+			/>
 			<Box
 				sx={{
-					marginTop: 8,
 					display: "flex",
 					flexDirection: "row",
 					flexWrap: "wrap",
@@ -60,78 +77,14 @@ export const HackerNewsList: React.FC = () => {
 					gap: 1,
 				}}
 			>
-				{data?.articles?.map((article: HackerNewsArticle, index: number) => (
-					<Box
+				{data?.articles.map((article: HackerNewsArticle, index: number) => (
+					<ArticleCard
 						key={article.id}
-						sx={{
-							margin: 1,
-							padding: 2,
-							width: "300px",
-							height: "80px",
-							marginBottom: 2,
-							display: "flex",
-							flexDirection: "column",
-							justifyContent: "space-evenly",
-							backgroundColor: "#f0f0f0",
-							border: "1px solid #ccc",
-							borderRadius: 2,
-							boxShadow: 5,
-							opacity: 0,
-							animation: "fadeIn 0.5s ease-in forwards",
-							animationDelay: `${index * 0.05}s`,
-							"@keyframes fadeIn": {
-								"0%": {
-									opacity: 0,
-									transform: "translateY(20px)",
-								},
-								"100%": {
-									opacity: 1,
-									transform: "translateY(0)",
-								},
-							},
-						}}
-					>
-						<Box
-							sx={{
-								display: "flex",
-								flexDirection: "row",
-								justifyContent: "center",
-								alignItems: "center",
-								gap: 1,
-								textAlign: "center",
-							}}
-						>
-							<Typography
-								variant="h6"
-								sx={{
-									fontWeight: "bold",
-								}}
-							>
-								{`Article ${index + 1}:`}
-							</Typography>
-							<Typography
-								variant="body1"
-								sx={{
-									padding: "5px 10px",
-									backgroundColor: "rgba(255, 0, 180, 0.1)",
-									color: "rgb(255, 0, 180)",
-									borderRadius: 1,
-									fontWeight: "bold",
-								}}
-							>
-								ID: {article.id}
-							</Typography>
-						</Box>
-						<Typography variant="body1">{article.time}</Typography>
-					</Box>
+						article={article}
+						index={(page - 1) * limit + index}
+					/>
 				))}
 			</Box>
-		)
-	} else {
-		return (
-			<div>
-				<p>No data</p>
-			</div>
-		)
-	}
+		</Box>
+	)
 }

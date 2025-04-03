@@ -10,13 +10,18 @@ export interface UseHackerNewsArticlesResult {
 	isLoading: boolean
 	isError: boolean
 	error: Error | null
+	totalArticles: number
 }
+
 export interface HackerNewsArticle {
 	id: string
 	time: string
 }
 
-const fetchHackerNewsArticles = async (): Promise<HackerNewsResponse> => {
+const fetchHackerNewsArticles = async (
+	page: number,
+	limit: number
+): Promise<HackerNewsResponse> => {
 	const website =
 		import.meta.env.VITE_ENVIRONMENT === "production"
 			? "https://nestjs-mega-backend-prod-893a099fba68.herokuapp.com/api/v1/scrapers/hacker-news-scraper/"
@@ -29,14 +34,32 @@ const fetchHackerNewsArticles = async (): Promise<HackerNewsResponse> => {
 		},
 	})
 	const data = await response.json()
-	return data
+
+	const startIndex = (page - 1) * limit
+	const endIndex = startIndex + limit
+	return {
+		articles: data.articles.slice(startIndex, endIndex),
+		isSorted: data.isSorted,
+	}
 }
 
-export function useHackerNewsArticles(): UseHackerNewsArticlesResult {
-	return useQuery<HackerNewsResponse, Error>({
-		queryKey: ["hackerNewsArticles"],
-		queryFn: fetchHackerNewsArticles,
+export function useHackerNewsArticles(
+	page: number,
+	limit: number
+): UseHackerNewsArticlesResult {
+	const { data, isLoading, isError, error } = useQuery({
+		queryKey: ["hackerNewsArticles", page],
+		queryFn: () => fetchHackerNewsArticles(page, limit),
 		staleTime: 5 * 60 * 1000,
 		gcTime: 30 * 60 * 1000,
-	}) as UseHackerNewsArticlesResult
+		placeholderData: (previousData) => previousData,
+	})
+
+	return {
+		data,
+		isLoading,
+		isError,
+		error,
+		totalArticles: 100,
+	} as UseHackerNewsArticlesResult
 }
