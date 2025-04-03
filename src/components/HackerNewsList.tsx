@@ -1,11 +1,7 @@
 import React from "react"
-import { useHackerNewsArticles } from "./hooks/useHackerNewsArticles"
+import { useHackerNewsArticles } from "../hooks/useHackerNewsArticles"
 import { Box, CircularProgress, Typography } from "@mui/material"
-
-export interface HackerNewsArticle {
-	id: string
-	time: string
-}
+import { HackerNewsArticle } from "../hooks/useHackerNewsArticles"
 
 export const HackerNewsList: React.FC = () => {
 	const { data, isLoading, isError, error } = useHackerNewsArticles()

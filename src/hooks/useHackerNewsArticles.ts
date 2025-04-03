@@ -1,20 +1,27 @@
 import { useQuery } from "@tanstack/react-query"
-import { HackerNewsArticle } from "../types"
 
-interface HackerNewsResponse {
+export interface HackerNewsResponse {
 	articles: HackerNewsArticle[]
 	isSorted: boolean
 }
 
-interface UseHackerNewsArticlesResult {
+export interface UseHackerNewsArticlesResult {
 	data: HackerNewsResponse | undefined
 	isLoading: boolean
 	isError: boolean
 	error: Error | null
 }
+export interface HackerNewsArticle {
+	id: string
+	time: string
+}
 
 const fetchHackerNewsArticles = async (): Promise<HackerNewsResponse> => {
-	const website = "http://localhost:3000/api/v1/scrapers/hacker-news-scraper/"
+	const website =
+		import.meta.env.VITE_ENVIRONMENT === "production"
+			? "https://nestjs-mega-backend-prod-893a099fba68.herokuapp.com/api/v1/scrapers/hacker-news-scraper/"
+			: "http://localhost:3000/api/v1/scrapers/hacker-news-scraper/"
+
 	const response = await fetch(website, {
 		method: "GET",
 		headers: {
