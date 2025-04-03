@@ -22,8 +22,7 @@ const fetchHackerNewsArticles = async (
 	page: number,
 	limit: number
 ): Promise<HackerNewsResponse> => {
-	const endpoint =
-		"https://nestjs-mega-backend-prod-893a099fba68.herokuapp.com/api/v1/scrapers/hacker-news-scraper/"
+	const endpoint = import.meta.env.VITE_API_PREPROD_URL
 
 	try {
 		const response = await fetch(endpoint, {

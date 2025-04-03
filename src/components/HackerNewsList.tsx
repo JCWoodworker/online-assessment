@@ -95,7 +95,7 @@ export const HackerNewsList: React.FC = () => {
 						You are blocked !!
 					</Typography>
 					<Typography variant="h4">
-						This API is rate limited to 10 requests per minute
+						This API is rate limited to 30 requests per minute, please wait a moment and try again.
 						</Typography>
 					</Box>
 				)}
