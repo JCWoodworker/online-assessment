@@ -40,7 +40,9 @@ export const HackerNewsList: React.FC = () => {
 					gap: 1,
 				}}
 			>
-				<Typography variant="h4">Error: {error?.message}</Typography>
+				<Typography variant="h4" sx={{ color: "rgb(253, 124, 214)" }}>
+					Error: {error?.message}
+				</Typography>
 			</Box>
 		)
 	}
@@ -103,10 +105,9 @@ export const HackerNewsList: React.FC = () => {
 								variant="h6"
 								sx={{
 									fontWeight: "bold",
-									textDecoration: "underline",
 								}}
 							>
-								Article ID:
+								{`Article ${index + 1}:`}
 							</Typography>
 							<Typography
 								variant="body1"
@@ -118,7 +119,7 @@ export const HackerNewsList: React.FC = () => {
 									fontWeight: "bold",
 								}}
 							>
-								{article.id}
+								ID: {article.id}
 							</Typography>
 						</Box>
 						<Typography variant="body1">{article.time}</Typography>
