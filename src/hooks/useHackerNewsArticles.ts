@@ -22,24 +22,41 @@ const fetchHackerNewsArticles = async (
 	page: number,
 	limit: number
 ): Promise<HackerNewsResponse> => {
-	const website =
-		import.meta.env.VITE_ENVIRONMENT === "production"
-			? "https://nestjs-mega-backend-prod-893a099fba68.herokuapp.com/api/v1/scrapers/hacker-news-scraper/"
-			: "http://localhost:3000/api/v1/scrapers/hacker-news-scraper/"
+	const endpoint = "https://nestjs-mega-backend-prod-893a099fba68.herokuapp.com/api/v1/scrapers/hacker-news-scraper/"
 
-	const response = await fetch(website, {
-		method: "GET",
-		headers: {
-			"Content-Type": "application/json",
-		},
-	})
-	const data = await response.json()
+	try {
+		const response = await fetch(endpoint, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		})
 
-	const startIndex = (page - 1) * limit
-	const endIndex = startIndex + limit
-	return {
-		articles: data.articles.slice(startIndex, endIndex),
-		isSorted: data.isSorted,
+		if (!response.ok) {
+			throw new Error(`HTTP error! Status: ${response.status}`)
+		}
+
+		const data = await response.json()
+
+		if (!data || !data.articles || !Array.isArray(data.articles)) {
+			return {
+				articles: [],
+				isSorted: false,
+			}
+		}
+
+		const startIndex = (page - 1) * limit
+		const endIndex = startIndex + limit
+		return {
+			articles: data.articles.slice(startIndex, endIndex),
+			isSorted: data.isSorted || false,
+		}
+	} catch (error) {
+		console.error("Error fetching Hacker News articles:", error)
+		return {
+			articles: [],
+			isSorted: false,
+		}
 	}
 }
 

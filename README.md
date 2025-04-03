@@ -8,9 +8,21 @@
 
 * If you're here you've unzipped the file ... congrats!
 * Go ahead and run ```yarn install```
-* Run ```yarn dev```
-* If it didn't happen automatically, open your browser and go to ```http://localhost:5173```
-* Check out the site!!
+
+  ### OPTION 1
+
+  * Run ```yarn dev```
+  * If it didn't happen automatically, open your browser and go to ```http://localhost:5173```
+  * Check out the site!!
+
+  ### OPTION 2
+
+  * ORIGINAL REQUIREMENT !!!
+  * From the root directory run ```node QA_WOLF_TAKE_HOME```
+  * You'll have the following logged to the console:
+    * ```Articles returned: 100```
+    * ```Articles are sorted: true``` (hopefully TRUE, lol)
+    * ```All articles: []``` A list of all articles and their timestamps IN ORDER !!
 
 ## Troubleshooting
 

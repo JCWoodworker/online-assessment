@@ -52,6 +52,8 @@ export const HackerNewsList: React.FC = () => {
 		)
 	}
 
+	const noArticlesFound = data?.articles.length === 0
+
 	return (
 		<Box
 			sx={{
@@ -62,11 +64,13 @@ export const HackerNewsList: React.FC = () => {
 				gap: 4,
 			}}
 		>
-			<Pagination
-				currentPage={page}
-				setCurrentPage={setPage}
-				totalPages={Math.ceil(totalArticles / limit)}
-			/>
+			{!noArticlesFound && (
+				<Pagination
+					currentPage={page}
+					setCurrentPage={setPage}
+					totalPages={Math.ceil(totalArticles / limit)}
+				/>
+			)}
 			<Box
 				sx={{
 					display: "flex",
@@ -77,13 +81,24 @@ export const HackerNewsList: React.FC = () => {
 					gap: 1,
 				}}
 			>
-				{data?.articles.map((article: HackerNewsArticle, index: number) => (
-					<ArticleCard
-						key={article.id}
-						article={article}
-						index={(page - 1) * limit + index}
-					/>
-				))}
+				{!noArticlesFound ? (
+					data?.articles.map((article: HackerNewsArticle, index: number) => (
+						<ArticleCard
+							key={article.id}
+							article={article}
+							index={(page - 1) * limit + index}
+						/>
+					))
+				) : (
+          <Box>
+					<Typography variant="h4">
+						You are blocked !!
+					</Typography>
+					<Typography variant="h4">
+						This API is rate limited to 10 requests per minute
+						</Typography>
+					</Box>
+				)}
 			</Box>
 		</Box>
 	)
