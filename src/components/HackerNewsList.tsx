@@ -1,7 +1,7 @@
 import React from "react"
 import { useHackerNewsArticles } from "../hooks/useHackerNewsArticles"
 import { HackerNewsArticle } from "../types"
-import { Box, LinearProgress, Typography } from "@mui/material"
+import { Box, CircularProgress, Typography } from "@mui/material"
 
 export const HackerNewsList: React.FC = () => {
 	const { data, isLoading, isError, error } = useHackerNewsArticles()
@@ -19,8 +19,10 @@ export const HackerNewsList: React.FC = () => {
 					gap: 1,
 				}}
 			>
-				<Typography variant="h4">Loading articles...</Typography>
-				<LinearProgress />
+				<Typography variant="h5" sx={{ color: "rgb(253, 124, 214)" }}>
+					Loading articles...
+				</Typography>
+				<CircularProgress />
 			</Box>
 		)
 	}
@@ -56,25 +58,69 @@ export const HackerNewsList: React.FC = () => {
 					gap: 1,
 				}}
 			>
-				{data?.articles?.map((article: HackerNewsArticle) => (
+				{data?.articles?.map((article: HackerNewsArticle, index: number) => (
 					<Box
 						key={article.id}
 						sx={{
+							margin: 1,
 							padding: 2,
-							width: "350px",
+							width: "300px",
+							height: "80px",
 							marginBottom: 2,
 							display: "flex",
 							flexDirection: "column",
-							justifyContent: "space-between",
+							justifyContent: "space-evenly",
 							backgroundColor: "#f0f0f0",
 							border: "1px solid #ccc",
 							borderRadius: 2,
-							boxShadow: 3,
+							boxShadow: 5,
+							opacity: 0,
+							animation: "fadeIn 0.5s ease-in forwards",
+							animationDelay: `${index * 0.05}s`,
+							"@keyframes fadeIn": {
+								"0%": {
+									opacity: 0,
+									transform: "translateY(20px)",
+								},
+								"100%": {
+									opacity: 1,
+									transform: "translateY(0)",
+								},
+							},
 						}}
 					>
-						<Typography variant="h6" sx={{ fontWeight: "bold" }}>
-							Article ID: {article.id}
-						</Typography>
+						<Box
+							sx={{
+								display: "flex",
+								flexDirection: "row",
+								justifyContent: "center",
+								alignItems: "center",
+								gap: 1,
+								textAlign: "center",
+							}}
+						>
+							<Typography
+								variant="h6"
+								sx={{
+									fontWeight: "bold",
+									textDecoration: "underline",
+								}}
+							>
+								Article ID:
+							</Typography>
+							<Typography
+								variant="body1"
+								sx={{
+									padding: "5px 10px",
+									backgroundColor: "rgba(255, 0, 180, 0.1)",
+									color: "rgb(255, 0, 180)",
+									borderRadius: 1,
+									fontWeight: "bold",
+								}}
+							>
+								{article.id}
+							</Typography>
+						</Box>
 						<Typography variant="body1">Time Stamp: {article.time}</Typography>
 					</Box>
 				))}

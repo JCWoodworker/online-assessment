@@ -1,4 +1,5 @@
 import React from "react"
+import "./App.css"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { HackerNewsList } from "./components/HackerNewsList"
 import {
@@ -18,7 +19,6 @@ const queryClient = new QueryClient({
 	},
 })
 
-// Create a responsive theme
 let theme = createTheme()
 theme = responsiveFontSizes(theme)
 
@@ -28,15 +28,20 @@ export const App: React.FC = () => {
 			<QueryClientProvider client={queryClient}>
 				<Box
 					sx={{
-						marginTop: 4,
+						marginTop: 2,
 						padding: 2,
 						textAlign: "center",
-						borderRadius: 2,
-						backgroundColor: "rgb(126, 195, 255)",
 					}}
 				>
-					<Typography variant="h2">Hacker News</Typography>
-					<Typography variant="h4">- 100 Latest Articles -</Typography>
+					<Typography
+						variant="h2"
+						sx={{ color: "rgb(98, 234, 255)", fontWeight: "bold" }}
+					>
+						Hacker News
+					</Typography>
+					<Typography variant="h4" sx={{ color: "white" }}>
+						- 100 Latest Articles -
+					</Typography>
 				</Box>
 				<HackerNewsList />
 			</QueryClientProvider>

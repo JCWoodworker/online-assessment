@@ -3,5 +3,8 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
-  /* background-color: rgb(126, 195, 255); */
+}
+
+body {
+  background-color: rgb(42, 32, 171);
 }
