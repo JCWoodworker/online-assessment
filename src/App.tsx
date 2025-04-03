@@ -1,7 +1,7 @@
 import React from "react"
 import "./App.css"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { HackerNewsList } from "./components/HackerNewsList"
+import { HackerNewsList } from "./HackerNewsList"
 import {
 	Box,
 	Typography,
@@ -23,9 +23,11 @@ let theme = createTheme()
 theme = responsiveFontSizes(theme)
 
 export const App: React.FC = () => {
+
 	return (
 		<ThemeProvider theme={theme}>
 			<QueryClientProvider client={queryClient}>
+
 				<Box
 					sx={{
 						marginTop: 2,
@@ -43,6 +45,7 @@ export const App: React.FC = () => {
 						- 100 Latest Articles -
 					</Typography>
 				</Box>
+
 				<HackerNewsList />
 			</QueryClientProvider>
 		</ThemeProvider>

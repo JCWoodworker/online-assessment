@@ -1,10 +1,12 @@
+import { format } from "date-fns"
 import { chromium } from "playwright"
 
-async function sortHackerNewsArticles() {
+export async function scrapeHackerNews() {
 	let browser
 	try {
 		browser = await chromium.launch({
 			headless: true,
+			args: ["--no-sandbox", "--disable-setuid-sandbox"],
 		})
 
 		const context = await browser.newContext()
@@ -25,17 +27,34 @@ async function sortHackerNewsArticles() {
 				".submission",
 				(elements) => {
 					return elements.map((article) => {
+						const rawTime = article.nextElementSibling
+							.querySelector(".age")
+							.getAttribute("title")
+
 						return {
 							id: article.getAttribute("id"),
-							time: article.nextElementSibling
-								.querySelector(".age")
-								.getAttribute("title"),
+							time: rawTime,
 						}
 					})
 				}
 			)
 
-			allArticles = [...allArticles, ...currentPageArticles]
+			const formattedArticles = currentPageArticles.map((article) => {
+				try {
+					const isoDatePart = article.time.split(" ")[0]
+					return {
+						...article,
+						time: format(new Date(isoDatePart), "MMMM do, yyyy '@' h:mm:ssaaa"),
+					}
+				} catch (error) {
+					console.error("Error formatting date:", error)
+					return {
+						article,
+					}
+				}
+			})
+
+			allArticles = [...allArticles, ...formattedArticles]
 
 			if (currentPageArticles.length > 0) {
 				nextParam = currentPageArticles[currentPageArticles.length - 1].id
@@ -46,20 +65,27 @@ async function sortHackerNewsArticles() {
 		}
 
 		allArticles = allArticles.slice(0, 100)
-		console.log(allArticles)
 
 		let isSorted = true
 		for (let i = 1; i < allArticles.length; i++) {
 			const prevTime = new Date(allArticles[i - 1].time)
 			const currTime = new Date(allArticles[i].time)
 			if (prevTime < currTime) {
-				console.log(`Sorting error at article ${allArticles[i].id}`)
 				isSorted = false
 				break
 			}
 		}
+
+		console.log("Articles returned:", allArticles.length)
+		console.log("Articles are sorted:", isSorted)
+		console.log("All articles:", allArticles)
+
+		return {
+			articles: allArticles,
+			isSorted,
+		}
 	} catch (error) {
-		console.error("Error details:", error)
+		throw new Error(`Failed to scrape Hacker News: ${error.message}`)
 	} finally {
 		if (browser) {
 			await browser.close()
@@ -67,12 +93,4 @@ async function sortHackerNewsArticles() {
 	}
 }
 
-const run = async () => {
-	try {
-		await sortHackerNewsArticles()
-	} catch (error) {
-		console.error("Top level error:", error)
-	}
-}
-
-run()
+scrapeHackerNews()

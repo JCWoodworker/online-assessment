@@ -1,7 +1,11 @@
 import React from "react"
-import { useHackerNewsArticles } from "../hooks/useHackerNewsArticles"
-import { HackerNewsArticle } from "../types"
+import { useHackerNewsArticles } from "./hooks/useHackerNewsArticles"
 import { Box, CircularProgress, Typography } from "@mui/material"
+
+export interface HackerNewsArticle {
+	id: string
+	time: string
+}
 
 export const HackerNewsList: React.FC = () => {
 	const { data, isLoading, isError, error } = useHackerNewsArticles()
@@ -121,7 +125,7 @@ export const HackerNewsList: React.FC = () => {
 								{article.id}
 							</Typography>
 						</Box>
-						<Typography variant="body1">Time Stamp: {article.time}</Typography>
+						<Typography variant="body1">{article.time}</Typography>
 					</Box>
 				))}
 			</Box>
