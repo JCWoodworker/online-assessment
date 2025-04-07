@@ -65,7 +65,7 @@ const ArticleCard = ({
 				<Typography
 					variant="body1"
 					sx={{
-						marginTop: "20px",
+						marginTop: "30px",
 						fontWeight: "bold",
 						textAlign: "center",
 						maxWidth: "200px",
