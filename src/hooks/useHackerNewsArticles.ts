@@ -18,6 +18,7 @@ export interface HackerNewsArticle {
   title: string;
   id: string;
   time: string;
+	url: string;
 }
 
 const fetchHackerNewsArticles = async (
