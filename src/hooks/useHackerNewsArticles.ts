@@ -14,8 +14,10 @@ export interface UseHackerNewsArticlesResult {
 }
 
 export interface HackerNewsArticle {
-	id: string
-	time: string
+  position: number;
+  title: string;
+  id: string;
+  time: string;
 }
 
 const fetchHackerNewsArticles = async (

@@ -3,7 +3,6 @@ import { HackerNewsArticle } from "../hooks/useHackerNewsArticles"
 
 const ArticleCard = ({
 	article,
-	index,
 }: {
 	article: HackerNewsArticle
 	index: number
@@ -49,24 +48,33 @@ const ArticleCard = ({
 				}}
 			>
 				<Typography
-					variant="h6"
+					variant="body2"
 					sx={{
+						padding: "5px 10px",
 						fontWeight: "bold",
+						position: "absolute",
+						top: "8px",
+						left: "8px",
+						color: "rgb(255, 0, 180)",
+						backgroundColor: "rgba(255, 0, 180, 0.1)",
+						borderRadius: "5px",
 					}}
 				>
-					{`Article ${index + 1}:`}
+					{`#${article.position} - ID: ${article.id}`}
 				</Typography>
 				<Typography
 					variant="body1"
 					sx={{
-						padding: "5px 10px",
-						backgroundColor: "rgba(255, 0, 180, 0.1)",
-						color: "rgb(255, 0, 180)",
-						borderRadius: 1,
+						marginTop: "20px",
 						fontWeight: "bold",
+						textAlign: "center",
+						maxWidth: "200px",
+						overflow: "hidden",
+						textOverflow: "ellipsis",
+						whiteSpace: "nowrap",
 					}}
 				>
-					ID: {article.id}
+					{article.title.length > 30 ? `${article.title.substring(0, 30)}...` : article.title}
 				</Typography>
 			</Box>
 			<Typography variant="body1">{article.time}</Typography>
